@@ -33,7 +33,7 @@ function App() {
       dispatch && dispatch({
         type: "init",
         userPokemons: userPokemonsData.collection,
-        allPokemons: allPokemonsData
+        allPokemons: allPokemonsData.results
       })
 
     })();

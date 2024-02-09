@@ -41,7 +41,7 @@ function userReducer(state: IPokemonContext, action: PokemonContextActions) {
         case 'catch': {
             return {
                 ...state,
-                userPokemons: [...state.userPokemons, { id: action.pokemonId }]
+                userPokemons: action.userPokemons
             };
         }
         case 'release': {

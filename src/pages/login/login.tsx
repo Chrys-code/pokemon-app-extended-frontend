@@ -75,7 +75,7 @@ const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
     const actionButtonText = loginMethod === "register" ? "Register" : "Login";
 
     return (
-        <main className='page'>
+        <main className='login-page'>
             <section>
                 <fieldset>
                     <legend>{actionButtonText}</legend>

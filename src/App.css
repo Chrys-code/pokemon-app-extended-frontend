@@ -13,11 +13,20 @@
   /* font sizes */
 
   --font-size-medium: 1.25em;
-  --header-font-size-h2: 1.75em;
+  --header-font-size-h1: 1.75em;
 }
 
 html {
   background-color: rgb(247, 242, 226);
+}
+
+
+h1 {
+  font-size: var(--header-font-size-h1);
+}
+
+p {
+  font-size: var(--font-size-medium);
 }
 
 

@@ -1,4 +1,4 @@
-.page {
+.login-login-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -7,21 +7,21 @@
     gap: 2em;
 }
 
-.page section {
+.login-page section {
     margin: auto;
     max-width: 80rem;
 }
 
-.page fieldset {
+.login-page fieldset {
     border-radius: 1em;
 }
 
-.page fieldset legend {
+.login-page fieldset legend {
     margin-left: 2em;
     padding: .5em 1em;
 }
 
-.page form {
+.login-page form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,24 +29,24 @@
     padding: 2em;
 }
 
-.page form>input {
+.login-page form>input {
     margin-top: .5em;
 }
 
-.page form>input:not(:last-of-type) {
+.login-page form>input:not(:last-of-type) {
     margin-bottom: 2em;
 }
 
-.page form>button {
+.login-page form>button {
     margin-top: 2em;
 }
 
-.page section>button {
+.login-page section>button {
     display: block;
     margin: auto;
     margin-top: 2em;
 }
 
-.page button {
+.login-page button {
     padding: .5em 1em;
 }
