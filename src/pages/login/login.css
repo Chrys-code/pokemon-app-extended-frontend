@@ -1,0 +1,52 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+}
+
+.page section {
+    margin: auto;
+    max-width: 80rem;
+}
+
+.page fieldset {
+    border-radius: 1em;
+}
+
+.page fieldset legend {
+    margin-left: 2em;
+    padding: .5em 1em;
+}
+
+.page form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2em;
+}
+
+.page form>input {
+    margin-top: .5em;
+}
+
+.page form>input:not(:last-of-type) {
+    margin-bottom: 2em;
+}
+
+.page form>button {
+    margin-top: 2em;
+}
+
+.page section>button {
+    display: block;
+    margin: auto;
+    margin-top: 2em;
+}
+
+.page button {
+    padding: .5em 1em;
+}
