@@ -5,14 +5,39 @@ import {
 
 import { router } from './routes';
 import { AuthContext } from "./contexts/auth";
-import { useContext } from 'react';
+import { PokemonDispatchContext } from './contexts/pokemonCollection';
+import { useContext, useEffect } from 'react';
 import Login from './pages/login/login';
+import { getUserPokemons, listAllPokemons } from './api/pokemons';
 
 
 function App() {
 
   // Use Auth context to grab auth data
   const authContext = useContext(AuthContext);
+  const dispatch = useContext(PokemonDispatchContext);
+
+  useEffect((): (() => void) | undefined => {
+
+    // Check for user
+    if (!authContext?.isAuthenticated) return;
+    if (!authContext.id) return;
+
+    (async () => {
+
+      // get pokemons
+      const allPokemonsData = await listAllPokemons();
+      const userPokemonsData = await getUserPokemons({ userId: authContext.id! });
+
+      // set pokemons for user and to list all
+      dispatch && dispatch({
+        type: "init",
+        userPokemons: userPokemonsData.collection,
+        allPokemons: allPokemonsData
+      })
+
+    })();
+  }, [authContext])
 
   // If user is authenticated show router
   if (authContext?.isAuthenticated) {

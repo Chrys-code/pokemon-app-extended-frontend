@@ -52,7 +52,7 @@ const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
     }
 
 
-    // Handles api call to register ot login based on @param loginMethod
+    // Handles api call to register or login based on @param loginMethod
     // May be worth to include this process in an IIFE to seal and avoid data inspection in the future
     async function handleAPICall({ email, password, loginMethod }: { email: string, password: string, loginMethod: "register" | "login" }): Promise<{ email: string, id: string } | undefined> {
         if (!email || !password) return;
@@ -70,6 +70,7 @@ const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
         return data.user;
     }
 
+    // State changing button values based on loginMethod
     const switchButtonText = loginMethod === "register" ? "Login" : "Register";
     const actionButtonText = loginMethod === "register" ? "Register" : "Login";
 

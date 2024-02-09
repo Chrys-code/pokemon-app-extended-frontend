@@ -14,10 +14,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const [user, dispatch] = useReducer(userReducer, initialUser);
 
-    useEffect((): (() => void) => {
-        console.log(user)
-        return (): void => { }
-    }, [user])
+    // Monitor user context for development
+    // useEffect((): (() => void) => {
+    //     console.log(user)
+    //     return (): void => { }
+    // }, [user])
 
     return (
         <AuthContext.Provider value={user}>
