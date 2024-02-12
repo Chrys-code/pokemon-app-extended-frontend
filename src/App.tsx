@@ -11,6 +11,9 @@ import Login from './pages/login/login';
 import { getUserPokemons, listAllPokemons } from './api/pokemons';
 
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
 
   // Use Auth context to grab auth data
@@ -42,13 +45,17 @@ function App() {
 
   // If user is authenticated show router
   if (authContext?.isAuthenticated) {
-    return <RouterProvider router={router} />
+    return <>
+    <RouterProvider router={router} />
+    <ToastContainer />
+    </>
   }
 
   // If user is not authenticated show login screen
   return (
     <div className="App" >
       <Login />
+      <ToastContainer />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { createContext, useReducer } from 'react';
-import { Pokemons, PokemonActions, UserPokemon } from './pokemon.types';
+import { Pokemons, PokemonActions, PokemonActionTypes } from './pokemon.types';
+import {toast} from "react-toastify";
 
 // Creating context to hold & mutate state
 export const PokemonContext = createContext<Pokemons | null>(null);
@@ -23,6 +24,11 @@ export function PokemonProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
+
+function showNotification(actionType: PokemonActionTypes) {
+    toast.success(`${actionType}ed pokemon!`)
+}
+
 /**
  * Handles state mutations
  * @param state - The state of pokemon context including all & user's pokemons
@@ -31,16 +37,19 @@ export function PokemonProvider({ children }: { children: React.ReactNode }) {
  */
 function pokemonReducer(state: Pokemons, action: PokemonActions) {
     switch (action.type) {
+        
         case 'catch': {
+            showNotification(action.type);
             return {
                 ...state,
                 userPokemons: action.userPokemons || state.userPokemons
             };
         }
         case 'release': {
+            showNotification(action.type);
             return {
                 ...state,
-                userPokemons: state.userPokemons.filter((pokemon: UserPokemon) => pokemon.id !== action.pokemonId)
+                userPokemons: action.userPokemons || state.userPokemons,
             };
         }
         case 'init': {

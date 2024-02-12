@@ -52,6 +52,8 @@ const Login: FC = ({ }): JSX.Element => {
                 return;
             }
 
+            
+
             // Dispatch to update context with login data
             dispatch && dispatch({
                 type: loginMethod,
