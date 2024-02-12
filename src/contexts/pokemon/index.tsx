@@ -26,7 +26,8 @@ export function PokemonProvider({ children }: { children: React.ReactNode }) {
 
 
 function showNotification(actionType: PokemonActionTypes) {
-    toast.success(`${actionType}ed pokemon!`)
+    if (actionType == "catch") toast.success(`Pokemon caught!`)
+    if (actionType == "release") toast.success(`Pokemon released!`)
 }
 
 /**
