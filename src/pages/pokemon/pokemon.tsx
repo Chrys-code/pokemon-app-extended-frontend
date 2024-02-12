@@ -76,6 +76,11 @@ const Pokemon: FC = ({ }): JSX.Element => {
             responseData = await catchPokemon({ userId: authContext.id, pokemon: pokemonCopy })
         }
 
+
+        // This will release or catch
+        // response data returns the new set of pokemons
+        // so it does not matter what the action is ... release / catch
+
         // Set state - catch pokemon
         dispatch && dispatch({
             type: 'catch',
