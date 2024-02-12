@@ -18,15 +18,11 @@
 ## Features
 
 - Login
-- Register (auto logs the user into the app) ! In this case no JWT is issued by the services (yet) !
+- Register
 - List all pokemons
+- Broswe your own collection
 - Inspect a pokemon
 - Catch a pokemon
-
-## Tests
-
-Had no time for test coverage the test found in App.test.tsx is just an example written by me.
-
 
 ## Arcitecture review and differences from requirements:
 
@@ -40,6 +36,5 @@ The application is wrapped into 2 contexts; AuthContext & PokemonContext. One of
 ## Note
 
 Please note that the application is not finished and requires more work.
-The application hasn't been tested, refactored or prepared in any flavor for production yet.
-Some APIs are still directed to localhost instead of using .env to get the correct URLs.
+This application was developed over 14 hours so far insetad of 8
 
