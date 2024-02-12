@@ -1,0 +1,22 @@
+.header {
+    width: 100%;
+}
+
+.header nav {
+    width: 100%;
+    max-width: 80rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: auto;
+    padding: 1em 0;
+}
+
+.header nav button {
+    padding: .5em 1em;
+}
+
+.header nav #back-link {
+    display: block;
+    padding: .5em 1em;
+}

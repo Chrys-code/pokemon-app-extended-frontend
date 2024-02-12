@@ -1,9 +1,9 @@
-import { createContext, useEffect, useReducer } from 'react';
-import { PokemonContext as IPokemonContext, PokemonContextActions, UserPokemon } from './pokemonCollection.types';
+import { createContext, useReducer } from 'react';
+import { Pokemons, PokemonActions, UserPokemon } from './pokemon.types';
 
 // Creating context to hold & mutate state
-export const PokemonContext = createContext<IPokemonContext | null>(null);
-export const PokemonDispatchContext = createContext<React.Dispatch<any> | null>(null);
+export const PokemonContext = createContext<Pokemons | null>(null);
+export const PokemonDispatchContext = createContext<React.Dispatch<PokemonActions> | null>(null);
 
 /**
  * Pokemon provider acts as a state manager for pokemon context cotaining all pokemons and user pokemons
@@ -12,14 +12,7 @@ export const PokemonDispatchContext = createContext<React.Dispatch<any> | null>(
  */
 export function PokemonProvider({ children }: { children: React.ReactNode }) {
 
-    // @ts-ignore
-    const [pokemons, dispatch] = useReducer(userReducer, initialPokemons);
-
-    // Monitor pokemons context for development
-    useEffect((): (() => void) => {
-        console.log(pokemons)
-        return (): void => { }
-    }, [pokemons])
+    const [pokemons, dispatch] = useReducer(pokemonReducer, initialPokemons);
 
     return (
         <PokemonContext.Provider value={pokemons}>
@@ -36,12 +29,12 @@ export function PokemonProvider({ children }: { children: React.ReactNode }) {
  * @param action - The actions to mutate context it only affects user's pokemons
  * @returns 
  */
-function userReducer(state: IPokemonContext, action: PokemonContextActions) {
+function pokemonReducer(state: Pokemons, action: PokemonActions) {
     switch (action.type) {
         case 'catch': {
             return {
                 ...state,
-                userPokemons: action.userPokemons
+                userPokemons: action.userPokemons || state.userPokemons
             };
         }
         case 'release': {
@@ -53,8 +46,8 @@ function userReducer(state: IPokemonContext, action: PokemonContextActions) {
         case 'init': {
             return {
                 ...state,
-                userPokemons: action.userPokemons,
-                allPokemons: action.allPokemons
+                userPokemons: action.userPokemons || state.userPokemons,
+                allPokemons: action.allPokemons || state.allPokemons
             };
         }
         default: {
@@ -64,4 +57,4 @@ function userReducer(state: IPokemonContext, action: PokemonContextActions) {
 }
 
 // Initial state for pokemon collection context
-const initialPokemons: IPokemonContext = { userPokemons: [], allPokemons: [] };
+const initialPokemons: Pokemons = { userPokemons: [], allPokemons: [] };

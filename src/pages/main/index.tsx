@@ -1,11 +1,11 @@
-import React, { FC, PropsWithChildren } from 'react'
+import React, { FC } from 'react'
 import './main.css'
 import List from '../../components/list/list'
 
-const MainPage: FC = ({ }: PropsWithChildren): JSX.Element => {
+const MainPage: FC = ({ }): JSX.Element => {
     return (
-        <main className='page'>
-            <h2>Pokemons</h2>
+        <main className='main-page'>
+            <h1>Pokemons</h1>
             <List />
         </main>
     )

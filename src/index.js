@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/auth';
-import { PokemonProvider } from './contexts/pokemonCollection';
+import { PokemonProvider } from './contexts/pokemon';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

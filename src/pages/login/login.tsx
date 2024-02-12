@@ -1,22 +1,21 @@
-import React, { FC, PropsWithChildren, useContext, useRef, useState } from 'react'
+import React, { FC, useContext, useRef, useState } from 'react'
 import './login.css';
 
 import { AuthDispatchContext } from "../../contexts/auth";
-import { UserActionTypes } from '../../contexts/auth/authContext.types';
+import { User, UserActionTypes } from '../../contexts/auth/authContext.types';
 import { login, register } from '../../api/auth';
 
-const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
+const Login: FC = ({ }): JSX.Element => {
 
     // Dispatch Auth actions to set context
     const dispatch = useContext(AuthDispatchContext)
 
     // Refs to get values when form is submitted
-    const emailRef = useRef();
-    const passwordRef = useRef();
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
 
     // State to switch between login / register
     const [loginMethod, setLoginMethod] = useState<UserActionTypes>("register");
-
 
     // handle switching between login and register
     function handleLoginMethod() {
@@ -27,34 +26,52 @@ const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
         }
     }
 
-    // Handle for submission
-    // The login - register methods are quite similar, dispatch actios could be merged
+    /**
+     * Handle form submission
+     * @param e HTMLFormEvent
+     * @returns void
+     */
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         // Prevent default form action
         e.preventDefault();
 
-        // @ts-ignore
-        const userData = await handleAPICall({ email: emailRef.current?.value, password: passwordRef.current?.value, loginMethod });
+        (async () => {
 
-        console.log(userData)
-        if (!userData?.id || !userData?.email) {
-            return;
-        }
-        // Dispatch to update context with login data
-        dispatch && dispatch({
-            type: loginMethod,
-            userData: {
-                id: userData?.id,
-                email: userData?.email,
-                isAuthenticated: true
+            // Collect login data
+            const emailValue = emailRef.current?.value;
+            const passwordValue = passwordRef.current?.value;
+
+            // Check for login values
+            if (!emailValue || !passwordValue) return;
+
+            // Login or register
+            const userData = await handleAPICall({ email: emailRef.current?.value, password: passwordRef.current?.value, loginMethod });
+
+            // Check for user data returned
+            if (!userData?.id || !userData?.email) {
+                return;
             }
-        })
+
+            // Dispatch to update context with login data
+            dispatch && dispatch({
+                type: loginMethod,
+                userData: {
+                    id: userData?.id,
+                    email: userData?.email,
+                    isAuthenticated: true
+                }
+            })
+        })();
     }
 
-
-    // Handles api call to register or login based on @param loginMethod
-    // May be worth to include this process in an IIFE to seal and avoid data inspection in the future
-    async function handleAPICall({ email, password, loginMethod }: { email: string, password: string, loginMethod: "register" | "login" }): Promise<{ email: string, id: string } | undefined> {
+    /**
+     * Handles api call to register or login
+     * @param email - Users email
+     * @param password - Users password
+     * @param loginMethod - Login method selected in state login/register
+     * @returns User object
+     */
+    async function handleAPICall({ email, password, loginMethod }: { email: string, password: string, loginMethod: UserActionTypes }): Promise<User | undefined> {
         if (!email || !password) return;
 
         let data;
@@ -79,19 +96,16 @@ const Login: FC = ({ }: PropsWithChildren): JSX.Element => {
             <section>
                 <fieldset>
                     <legend>{actionButtonText}</legend>
-                    <form onSubmit={handleSubmit}>
+                    <form data-testid="login-form" onSubmit={handleSubmit}>
                         <label htmlFor='email'>Email:</label>
-                        {/*@ts-ignore*/}
-                        <input ref={emailRef} id="email" name="email" type="email" />
-
+                        <input ref={emailRef} id="email" name="email" type="email" data-testid="email-input" />
                         <label htmlFor='password'>Password:</label>
-                        {/*@ts-ignore*/}
-                        <input ref={passwordRef} id="password" name="password" type="password" />
+                        <input ref={passwordRef} id="password" name="password" type="password" data-testid="password-input" />
 
-                        <button>{actionButtonText}</button>
+                        <button data-testid="form-action-button">{actionButtonText}</button>
                     </form>
                 </fieldset>
-                <button onClick={handleLoginMethod}>{switchButtonText}</button>
+                <button onClick={handleLoginMethod} data-testid="form-action-switch-button">{switchButtonText}</button>
             </section>
         </main>
     )

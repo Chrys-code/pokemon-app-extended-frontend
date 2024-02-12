@@ -1,9 +1,12 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 import { User, UserActions } from './authContext.types';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 // Creating context to hold & mutate state
 export const AuthContext = createContext<User | null>(null);
-export const AuthDispatchContext = createContext<React.Dispatch<any> | null>(null);
+export const AuthDispatchContext = createContext<React.Dispatch<UserActions> | null>(null);
 
 /**
  * Auth provider acts as a state manager for auth context cotaining user data
@@ -13,12 +16,6 @@ export const AuthDispatchContext = createContext<React.Dispatch<any> | null>(nul
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const [user, dispatch] = useReducer(userReducer, initialUser);
-
-    // Monitor user context for development
-    // useEffect((): (() => void) => {
-    //     console.log(user)
-    //     return (): void => { }
-    // }, [user])
 
     return (
         <AuthContext.Provider value={user}>
@@ -30,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 /**
- * Handles state mutations
+ * Handles state action
  * @param state - The User or Auth state 
  * @param action - Actions related to the auth context
  * @returns 
@@ -54,6 +51,9 @@ function userReducer(state: User, action: UserActions) {
             };
         }
         case 'logout': {
+
+            cookies.remove("Authorization");
+
             return {
                 ...state,
                 id: undefined,
@@ -65,16 +65,6 @@ function userReducer(state: User, action: UserActions) {
             throw Error('Unknown action: ' + action.type);
         }
     }
-}
-
-function handleLogin() {
-
-    console.log("login")
-
-}
-
-function handleLogout() {
-    console.log("logout")
 }
 
 // Initial state for auth context

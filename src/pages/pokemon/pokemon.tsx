@@ -1,29 +1,38 @@
 import React, { FC, useContext, useEffect, useState } from 'react'
 import './pokemon.css'
 import { Link, useLocation } from 'react-router-dom';
-import { PokemonContext, PokemonDispatchContext } from '../../contexts/pokemonCollection';
+import { PokemonContext, PokemonDispatchContext } from '../../contexts/pokemon';
 import { AuthContext } from '../../contexts/auth';
-import { catchPokemon } from '../../api/pokemons';
+import { catchPokemon, releasePokemon } from '../../api/pokemons';
+import { UserPokemon, UserPokemons } from '../../contexts/pokemon/pokemon.types';
 
 const Pokemon: FC = ({ }): JSX.Element => {
 
+    // Get user data
     const authContext = useContext(AuthContext);
-    const dispatch = useContext(PokemonDispatchContext);
+
+    // Get pokemon data & pokemon actions
     const pokemonContext = useContext(PokemonContext);
+    const dispatch = useContext(PokemonDispatchContext);
 
     // get location data passed in state
     let data = useLocation();
 
-    // pokemon state
+    // Single pokemon state for display
     const [pokemon, setPokemon] = useState<any>();
 
     // fetch pokemon data on mount
     useEffect((): (() => void) | undefined => {
+        // Check for single pokemons access url
         if (!data.state.accessUrl) return;
 
+        // Fetch and set pokemon state
         (async () => {
+            // Fetch pokemon
             const pokemonData = await fetch(data.state.accessUrl);
             const result = await pokemonData.json();
+
+            // Construct necessary pokemon data
             if (result) {
                 const pokemonCopy = {
                     id: result.id,
@@ -33,29 +42,53 @@ const Pokemon: FC = ({ }): JSX.Element => {
                     weight: result.weight,
                     // did not find image about the pokemon in the response
                 }
+                // Set pokemon state
                 setPokemon(pokemonCopy)
             }
         })();
     }, [data.state.accessUrl])
 
 
-    async function handleButtonClick() {
+    /**
+     * Handles catching or releasing pokemon
+     * @param pokemonIsCaptured - detect if a pokemon is in user collection and act based on that
+     * @returns Promise<void>
+     */
+    async function handleButtonClick(pokemonIsCaptured: boolean): Promise<void> {
+
+        // Check for user
         if (!authContext?.id) return;
 
-        const responseData = await catchPokemon({ userId: authContext.id, pokemonId: pokemon.id })
-        console.log(responseData)
+        let responseData: { pokemons: UserPokemons };
+
+        const pokemonCopy: UserPokemon = {
+            id: pokemon.id,
+            name: pokemon.name,
+            url: data.state.accessUrl
+        }
+
+        // If captured, release pokemon else catch
+        if (pokemonIsCaptured) {
+            // Fetch release pokemon api
+            responseData = await releasePokemon({ userId: authContext.id, pokemonId: pokemonCopy.id })
+        } else {
+            // Fetch catch pokemon api
+            responseData = await catchPokemon({ userId: authContext.id, pokemon: pokemonCopy })
+        }
+
+        // Set state - catch pokemon
         dispatch && dispatch({
             type: 'catch',
-            userPokemons: responseData.pokemons.pokemons
+            userPokemons: responseData.pokemons
         })
     }
 
-    const pokemonIsCaptured = pokemonContext?.userPokemons?.find((userPokemon) => Number(userPokemon.id) === pokemon?.id);
-    const actionButtonText = pokemonIsCaptured ? "Release" : "Catch!"
+    // Changing display data based on user pokemons collection
+    const pokemonIsCaptured: boolean = !!pokemonContext?.userPokemons?.find((userPokemon) => Number(userPokemon.id) === pokemon?.id);
+    const actionButtonText: string = pokemonIsCaptured ? "Release" : "Catch!"
 
     return (
         <main className='pokemon-page'>
-            <Link to={"/"} >Back to main page</Link>
             <section>
                 <div className='image-wrapper' style={{ border: `${pokemonIsCaptured ? "2px solid green" : "none"}` }}>
                     <img src="https://cdn.pixabay.com/photo/2021/07/21/12/49/error-6482984_1280.png" />
@@ -64,10 +97,11 @@ const Pokemon: FC = ({ }): JSX.Element => {
                     <h1>Name: {pokemon?.name}</h1>
                     <p>Height: {pokemon?.height}</p>
                     <p>Weight: {pokemon?.weight}</p>
-                    <button onClick={handleButtonClick} >{actionButtonText}</button>
+                    <button onClick={() => handleButtonClick(pokemonIsCaptured)} >{actionButtonText}</button>
                 </div>
             </section>
         </main>
     )
 }
+
 export default Pokemon

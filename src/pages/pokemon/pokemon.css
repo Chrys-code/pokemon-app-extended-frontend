@@ -3,17 +3,24 @@
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 90vh;
     padding: 0 1em;
+}
+
+.pokemon-page #back-link {
+    margin: 2em 0;
 }
 
 .pokemon-page section {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start;
     width: 100%;
     gap: 1em;
+    padding: 1em;
+    background-color: white;
+    border-radius: 1em;
 }
 
 .pokemon-page .image-wrapper {
@@ -22,6 +29,7 @@
     min-height: 39.25em;
     display: block;
     position: relative;
+    border-radius: .5em;
     z-index: 1;
     order: 1;
 }
@@ -33,16 +41,30 @@
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 1em;
 }
 
 .pokemon-page .content-wrapper {
     text-align: left;
     width: 100%;
     max-width: 36.625rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2fr, 1);
+    grid-gap: 1em;
+    justify-items: center;
     order: 2;
+}
+
+.pokemon-page .content-wrapper h1 {
+    grid-row: span 2;
+    grid-column: span 2;
+}
+
+.pokemon-page .content-wrapper button {
+    padding: 1em 2em;
+    width: fit-content;
+    height: fit-content;
+    grid-column: span 2;
 }
 
 @media only screen and (min-width: 48em) {
@@ -63,8 +85,8 @@
         flex: none;
     }
 
-    .pokemon-page .content-wrapper {
-        padding: 3.75rem 0;
-        align-self: center;
+
+    .pokemon-page .content-wrapper button {
+        grid-column: span 1;
     }
 }

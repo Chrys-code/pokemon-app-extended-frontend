@@ -5,7 +5,7 @@ import {
 
 import { router } from './routes';
 import { AuthContext } from "./contexts/auth";
-import { PokemonDispatchContext } from './contexts/pokemonCollection';
+import { PokemonDispatchContext } from './contexts/pokemon';
 import { useContext, useEffect } from 'react';
 import Login from './pages/login/login';
 import { getUserPokemons, listAllPokemons } from './api/pokemons';
@@ -16,6 +16,7 @@ function App() {
   // Use Auth context to grab auth data
   const authContext = useContext(AuthContext);
   const dispatch = useContext(PokemonDispatchContext);
+
 
   useEffect((): (() => void) | undefined => {
 
@@ -32,7 +33,7 @@ function App() {
       // set pokemons for user and to list all
       dispatch && dispatch({
         type: "init",
-        userPokemons: userPokemonsData.collection,
+        userPokemons: userPokemonsData.pokemons,
         allPokemons: allPokemonsData.results
       })
 
