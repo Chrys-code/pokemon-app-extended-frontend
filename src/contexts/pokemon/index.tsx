@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react';
 import { Pokemons, PokemonActions, PokemonActionTypes } from './pokemon.types';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 // Creating context to hold & mutate state
 export const PokemonContext = createContext<Pokemons | null>(null);
@@ -38,7 +38,6 @@ function showNotification(actionType: PokemonActionTypes) {
  */
 function pokemonReducer(state: Pokemons, action: PokemonActions) {
     switch (action.type) {
-        
         case 'catch': {
             showNotification(action.type);
             return {

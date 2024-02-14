@@ -70,7 +70,7 @@ const Pokemon: FC = ({ }): JSX.Element => {
         // If captured, release pokemon else catch
         if (pokemonIsCaptured) {
             // Fetch release pokemon api
-            responseData = await releasePokemon({ userId: authContext.id, pokemonId: pokemonCopy.id });
+            responseData = await releasePokemon({ pokemonId: pokemonCopy.id });
 
             dispatch && dispatch({
                 type: 'release',
@@ -80,7 +80,7 @@ const Pokemon: FC = ({ }): JSX.Element => {
 
         } else {
             // Fetch catch pokemon api
-            responseData = await catchPokemon({ userId: authContext.id, pokemon: pokemonCopy });
+            responseData = await catchPokemon({ pokemon: pokemonCopy });
 
             dispatch && dispatch({
                 type: 'catch',
