@@ -37,17 +37,17 @@ function userReducer(state: User, action: UserActions) {
         case 'register': {
             return {
                 ...state,
-                id: action.userData?.id,
-                email: action.userData?.email,
-                isAuthenticated: action.userData?.isAuthenticated || false
+                id: action.payload?.userData.id,
+                email: action.payload?.userData?.email,
+                isAuthenticated: action.payload?.userData?.isAuthenticated || false
             };
         }
         case 'login': {
             return {
                 ...state,
-                id: action.userData?.id,
-                email: action.userData?.email,
-                isAuthenticated: action.userData?.isAuthenticated || false
+                id: action.payload?.userData?.id,
+                email: action.payload?.userData?.email,
+                isAuthenticated: action.payload?.userData?.isAuthenticated || false
             };
         }
         case 'logout': {

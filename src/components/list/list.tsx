@@ -3,7 +3,7 @@ import './list.css';
 import { PokemonContext } from '../../contexts/pokemon';
 import { Link } from 'react-router-dom';
 import Search from '../search/search';
-import { ApiPokemon, ApiPokemons, UserPokemon, UserPokemons } from '../../contexts/pokemon/pokemon.types';
+import { ApiPokemon, ApiPokemons, Pokemon, Pokedex } from '../../contexts/pokemon/pokemon.types';
 
 const List: FC = ({ }: PropsWithChildren): JSX.Element => {
 
@@ -11,7 +11,7 @@ const List: FC = ({ }: PropsWithChildren): JSX.Element => {
     const pokemonsContext = useContext(PokemonContext);
 
     // Get User & Api pokemons
-    const [searchableUserPokemons, setSearchableUserPokemons] = useState<UserPokemons | null>(null);
+    const [searchableUserPokemons, setSearchableUserPokemons] = useState<Pokedex | null>(null);
     const [searchableAPIPokemons, setSearchableAPIPokemons] = useState<ApiPokemons | null>(null);
 
     // Search result for either user or api pokemons
@@ -24,7 +24,7 @@ const List: FC = ({ }: PropsWithChildren): JSX.Element => {
     useEffect((): (() => void) | undefined => {
         if (!pokemonsContext) return;
         setSearchableAPIPokemons(pokemonsContext?.allPokemons);
-        setSearchableUserPokemons(pokemonsContext.userPokemons);
+        setSearchableUserPokemons(pokemonsContext.pokedex);
     }, [pokemonsContext])
 
     // Reset serach on collection change
@@ -43,7 +43,7 @@ const List: FC = ({ }: PropsWithChildren): JSX.Element => {
     function handleSearch(value: string | null, collection: boolean): void {
         if (collection) {
             if (value) {
-                let filteredResults = searchableUserPokemons?.filter((pokemon: UserPokemon) => pokemon.name.includes(value)) || [];
+                let filteredResults = searchableUserPokemons?.filter((pokemon: Pokemon) => pokemon.name.includes(value)) || [];
                 setSearchResult(filteredResults);
                 return;
             }
@@ -64,7 +64,7 @@ const List: FC = ({ }: PropsWithChildren): JSX.Element => {
         <>
             <Search onCollectionChange={setCollection} isCollectionChecked={collection} onSearch={v => handleSearch(v, collection)} />
             <ul className='list'>
-                {searchResult && searchResult.map((pokemon: UserPokemon | ApiPokemon, i: number) => {
+                {searchResult && searchResult.map((pokemon: Pokemon | ApiPokemon, i: number) => {
                     return (
                         <li key={i}>
                             <Link to="/pokemon" state={{ accessUrl: pokemon.url }}>

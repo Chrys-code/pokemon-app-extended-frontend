@@ -1,10 +1,10 @@
 import axios from "axios";
-import { UserPokemons } from "../contexts/pokemon/pokemon.types";
-import apiAxios from "./axios/config";
+import { Pokedex } from "../contexts/pokemon/pokemon.types";
+import axiosCli from "./axios/config";
 import { toast } from "react-toastify";
 
 
-const endpoint = `${process.env.REACT_APP_API}/pokemons`
+const endpoint = `${process.env.REACT_APP_API}/pokedex`
 
 export async function listAllPokemons(): Promise<any> {
     try {
@@ -16,9 +16,9 @@ export async function listAllPokemons(): Promise<any> {
     }
 }
 
-export async function getUserPokemons(): Promise<{ pokemons: UserPokemons }> {
+export async function getUserPokemons(): Promise<{ pokemons: Pokedex }> {
     try {
-        const response = await apiAxios.get(`${endpoint}/list`);
+        const response = await axiosCli.api.get(`${endpoint}/list`);
         return response.data;
     } catch (err: any) {
         if (err.response.data.message) toast.error(`${err.response.data.message}`);
@@ -26,9 +26,9 @@ export async function getUserPokemons(): Promise<{ pokemons: UserPokemons }> {
     }
 }
 
-export async function catchPokemon({ pokemon }: { pokemon: { id: string, name: string, url: string } }): Promise<{ pokemons: UserPokemons }> {
+export async function catchPokemon({ pokemon }: { pokemon: { pokemonId: string, name: string, url: string } }): Promise<{ pokemons: Pokedex }> {
     try {
-        const response = await apiAxios.post(`${endpoint}/catch`, {
+        const response = await axiosCli.api.post(`${endpoint}/catch`, {
             pokemon
         });
         return response.data;
@@ -38,11 +38,9 @@ export async function catchPokemon({ pokemon }: { pokemon: { id: string, name: s
     }
 }
 
-export async function releasePokemon({ pokemonId }: { pokemonId: string }): Promise<{ pokemons: UserPokemons }> {
+export async function releasePokemon({ pokemonId }: { pokemonId: string }): Promise<{ pokemons: Pokedex }> {
     try {
-        const response = await apiAxios.post(`${endpoint}/release`, {
-            pokemonId
-        });
+        const response = await axiosCli.api.delete(`${endpoint}/release?id=${pokemonId}`);
         return response.data;
     } catch (err: any) {
         if (err.response.data.message) toast.error(`${err.response.data.message}`);

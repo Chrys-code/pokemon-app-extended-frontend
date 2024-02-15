@@ -52,15 +52,17 @@ const Login: FC = ({ }): JSX.Element => {
                 return;
             }
 
-            
+
 
             // Dispatch to update context with login data
             dispatch && dispatch({
                 type: loginMethod,
-                userData: {
-                    id: userData?.id,
-                    email: userData?.email,
-                    isAuthenticated: true
+                payload: {
+                    userData: {
+                        id: userData?.id,
+                        email: userData?.email,
+                        isAuthenticated: true
+                    }
                 }
             })
         })();

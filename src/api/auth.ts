@@ -1,11 +1,11 @@
-import apiAxios from "./axios/config";
+import axiosCli from "./axios/config";
 import { toast } from "react-toastify";
 
 const endpoint = `${process.env.REACT_APP_API}/auth`
 
 export async function register({ email, password }: { email: string, password: string }): Promise<any> {
     try {
-        const response = await apiAxios.post(
+        const response = await axiosCli.api.post(
             `${endpoint}/register`,
             {
                 email, password
@@ -27,7 +27,7 @@ export async function register({ email, password }: { email: string, password: s
 
 export async function login({ email, password }: { email: string, password: string }): Promise<any> {
     try {
-        const response = await apiAxios.post(
+        const response = await axiosCli.api.post(
             `${endpoint}/login`,
             {
                 email, password

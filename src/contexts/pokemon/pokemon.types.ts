@@ -1,19 +1,20 @@
-export type UserPokemon = { id: string, url: string, name: string }
-export type UserPokemons = UserPokemon[]
+export type Pokemon = { _id: string, pokemonId: string, url: string, name: string }
+export type Pokedex = Pokemon[]
 
 export type ApiPokemon = { name: string, url: string }
 export type ApiPokemons = ApiPokemon[]
 
 export interface Pokemons {
-    userPokemons: UserPokemons,
+    pokedex: Pokedex,
     allPokemons: ApiPokemons
 }
 
 export interface PokemonActions {
     type: PokemonActionTypes,
-    pokemonId?: string,
-    allPokemons?: ApiPokemons,
-    userPokemons?: UserPokemons
+    payload?: {
+        allPokemons?: ApiPokemons,
+        pokedex?: Pokedex
+    }
 }
 
 export type PokemonActionTypes = "catch" | "release" | "init"

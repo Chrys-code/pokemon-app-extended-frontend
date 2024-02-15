@@ -24,7 +24,10 @@ export function PokemonProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
-
+/**
+ * Handles notification on user actions catching or releasing a pokemon
+ * @param actionType - catch / release / init
+ */
 function showNotification(actionType: PokemonActionTypes) {
     if (actionType == "catch") toast.success(`Pokemon caught!`)
     if (actionType == "release") toast.success(`Pokemon released!`)
@@ -42,21 +45,21 @@ function pokemonReducer(state: Pokemons, action: PokemonActions) {
             showNotification(action.type);
             return {
                 ...state,
-                userPokemons: action.userPokemons || state.userPokemons
+                pokedex: action.payload?.pokedex || state.pokedex
             };
         }
         case 'release': {
             showNotification(action.type);
             return {
                 ...state,
-                userPokemons: action.userPokemons || state.userPokemons,
+                pokedex: action.payload?.pokedex || state.pokedex,
             };
         }
         case 'init': {
             return {
                 ...state,
-                userPokemons: action.userPokemons || state.userPokemons,
-                allPokemons: action.allPokemons || state.allPokemons
+                pokedex: action.payload?.pokedex || state.pokedex,
+                allPokemons: action.payload?.allPokemons || state.allPokemons
             };
         }
         default: {
@@ -66,4 +69,4 @@ function pokemonReducer(state: Pokemons, action: PokemonActions) {
 }
 
 // Initial state for pokemon collection context
-const initialPokemons: Pokemons = { userPokemons: [], allPokemons: [] };
+const initialPokemons: Pokemons = { pokedex: [], allPokemons: [] };

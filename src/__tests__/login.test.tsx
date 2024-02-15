@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
 import { act } from 'react-dom/test-utils';
 import App from '../App';
-import apiAxios from '../api/axios/config';
+import axiosCli from '../api/axios/config';
 
 describe("Login screen", () => {
     beforeEach(() => {
@@ -71,7 +71,7 @@ describe("Login screen actions", () => {
 
     beforeEach(() => {
         render(<App />);
-        spy = jest.spyOn(apiAxios, "post");
+        spy = jest.spyOn(axiosCli.api, "post");
     })
 
     afterEach(() => {
@@ -92,7 +92,7 @@ describe("Login screen actions", () => {
         })
 
         // Assert
-        expect(apiAxios.post).toHaveBeenCalledTimes(1)
+        expect(axiosCli.api.post).toHaveBeenCalledTimes(1)
         expect(spy).toHaveBeenCalledWith(`${process.env.REACT_APP_API}/auth/register`,
             { email: "example@example.com", password: "test123" },
         );
@@ -115,7 +115,7 @@ describe("Login screen actions", () => {
         })
 
         // Assert
-        expect(apiAxios.post).toHaveBeenCalledTimes(1)
+        expect(axiosCli.api.post).toHaveBeenCalledTimes(1)
         expect(spy).toHaveBeenCalledWith(`${process.env.REACT_APP_API}/auth/login`,
             { email: "example@example.com", password: "test123" },
         );

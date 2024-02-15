@@ -8,7 +8,7 @@ import { AuthContext } from "./contexts/auth";
 import { PokemonDispatchContext } from './contexts/pokemon';
 import { useContext, useEffect } from 'react';
 import Login from './pages/login/login';
-import { getUserPokemons, listAllPokemons } from './api/pokemons';
+import { getUserPokemons, listAllPokemons } from './api/pokedex';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,8 +35,10 @@ function App() {
       // set pokemons for user and to list all
       dispatch && dispatch({
         type: "init",
-        userPokemons: userPokemonsData.pokemons,
-        allPokemons: allPokemonsData.results
+        payload: {
+          pokedex: userPokemonsData.pokemons,
+          allPokemons: allPokemonsData.results
+        }
       })
 
     })();

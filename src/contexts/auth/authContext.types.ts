@@ -6,7 +6,9 @@ export interface User {
 
 export interface UserActions {
     type: UserActionTypes,
-    userData?: AuthContextUserData
+    payload?: {
+        userData: AuthContextUserData
+    }
 }
 
 export type UserData = { id: string, email: string };
