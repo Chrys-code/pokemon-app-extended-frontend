@@ -6,13 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/auth';
 import { PokemonProvider } from './contexts/pokemon';
 
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <PokemonProvider>
+      <Provider store={store}>
+        {/* <PokemonProvider> */}
         <App />
-      </PokemonProvider>
+        {/* </PokemonProvider> */}
+      </Provider>
     </AuthProvider>
   </React.StrictMode>
 );
