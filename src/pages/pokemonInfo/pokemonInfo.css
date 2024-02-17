@@ -1,4 +1,4 @@
-.main-page {
+.pokemon-info-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -7,6 +7,10 @@
     gap: 4em;
 }
 
-.main-page h1 {
+.pokemon-info-page h1 {
     margin: 2em 0;
+}
+
+.pokemon-info-page h1::first-letter {
+    text-transform: capitalize;
 }

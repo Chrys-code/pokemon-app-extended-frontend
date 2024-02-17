@@ -5,7 +5,7 @@ import { AuthDispatchContext } from "../../contexts/auth";
 import { User, UserActionTypes } from '../../contexts/auth/authContext.types';
 import { login, register } from '../../api/auth';
 
-const Login: FC = ({ }): JSX.Element => {
+const Login: FC = (): JSX.Element => {
 
     // Dispatch Auth actions to set context
     const dispatch = useContext(AuthDispatchContext)

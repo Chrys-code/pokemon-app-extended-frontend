@@ -1,25 +1,18 @@
 import React, { FC } from 'react'
 import './main.css'
 import List from '../../components/list/list'
-import { useFetchPokedexQuery } from '../../store/api/pokedex/pokedex.api';
+import { PokemonListProvider } from '../../contexts/pokemonlist'
+import Searchbar from '../../components/searchbar/searchbar'
 
-const MainPage: FC = ({ }): JSX.Element => {
-
-    // get pokemons
-    const { data, isFetching } = useFetchPokedexQuery();
-
-    if (isFetching) return (
-        <>
-            <h1>Loading...</h1>
-        </>
-    )
-
-    console.log(data)
+const MainPage: FC = (): JSX.Element => {
 
     return (
         <main className='main-page'>
             <h1>Pokemons</h1>
-            <List />
+            <PokemonListProvider>
+                <Searchbar />
+                <List />
+            </PokemonListProvider>
         </main>
     )
 }

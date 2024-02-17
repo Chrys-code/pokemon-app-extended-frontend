@@ -3,7 +3,7 @@ import './nav.css'
 import { AuthDispatchContext } from '../../contexts/auth';
 import { useLocation, Location, Link } from 'react-router-dom';
 
-const Nav: FC = ({ }): JSX.Element => {
+const Nav: FC = (): JSX.Element => {
 
     const location: Location = useLocation();
     const dispatch = useContext(AuthDispatchContext);

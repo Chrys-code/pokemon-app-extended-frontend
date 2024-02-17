@@ -1,37 +1,27 @@
-import React, { FC, PropsWithChildren, useEffect, useRef, useState } from 'react'
-import './search.css';
-import { SearchProps } from './search.types'
+import React, { FC, useContext, useState } from 'react'
+import './search.css'
 import { useDebounce } from '../../utils/hooks/useDebounce';
+import { PokemonListDispatchContext } from '../../contexts/pokemonlist';
 
-const Search: FC<SearchProps> = ({ onCollectionChange, isCollectionChecked, onSearch }: PropsWithChildren<SearchProps>): JSX.Element => {
+const Search: FC = (): JSX.Element => {
 
-    const searchRef = useRef<HTMLInputElement>(null);
+    const [search, setSearch] = useState<string>();
+    const dispatch = useContext(PokemonListDispatchContext);
 
-    // Store search value from input field
-    const [searchValue, setSearchValue] = useState<string | null>(null);
+    function handleSearch(): void {
+        dispatch && dispatch({
+            type: 'search',
+            payload: {
+                search: search
+            }
+        })
+    }
 
-    // Initiate search after .6s user stopped typing
-    useDebounce(
-        () => onSearch(searchValue),
-        600,
-        [searchValue]
-    );
-
-    // Reset input on collection change
-    useEffect((): (() => void) => {
-        if (searchRef.current) searchRef.current.value = '';
-        setSearchValue('')
-        return (): void => { }
-    }, [isCollectionChecked])
-
+    useDebounce(handleSearch, 600, [search]);
 
     return (
-        <div className='search'>
-            <input ref={searchRef} id="search" name="search" placeholder='Search...' onChange={e => setSearchValue(e.target.value)} />
-            <label htmlFor='collection'>Browse my collection:
-                {/* onChange is just to suppress warning for now as we need toggle managed by react state*/}
-                <input id="collection" name="collection" type='radio' checked={isCollectionChecked} onClick={() => onCollectionChange(!isCollectionChecked)} onChange={() => { }} />
-            </label>
+        <div className='search-container'>
+            <input onChange={e => setSearch(e.target.value)} type="text" placeholder='search for a pokemon...' />
         </div>
     )
 }

@@ -1,26 +1,4 @@
-.search {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-bottom: 2em;
-    gap: 1em;
-}
-
-.search input#search {
-    padding: 1em 2em;
-    width: 100%;
-    max-width: 20rem;
-}
-
-.search input#collection {
-    margin-left: .5em;
-}
-
-@media only screen and (min-width: 48em) {
-    .search {
-        flex-direction: row;
-        gap: 0;
-    }
+.search-container input {
+    padding: .5em 1em;
+    border-radius: .25em;
 }

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { DBPokemon, Pokemon } from './pokedex.api.types';
+import { PokedexApiResponse } from './pokedex.api.types';
 import Cookies from 'universal-cookie';
 
 const endpoint = `${process.env.REACT_APP_API}/pokedex`
@@ -16,25 +16,31 @@ export const pokedexApiSlice = createApi({
             return headers;
         }
     }),
+    tagTypes: ['pokedex'],
     endpoints(builder) {
         return {
-            fetchPokedex: builder.query<DBPokemon, void>({
+            fetchPokedex: builder.query<PokedexApiResponse, void>({
                 query() {
                     return '/list'
-                }
+                },
+                providesTags: ["pokedex"]
             }),
-            addToPokedex: builder.mutation<DBPokemon[], string>({
+            addToPokedex: builder.mutation<PokedexApiResponse, number>({
                 query: pokemonId => ({
                     url: '/catch',
                     method: 'POST',
-                    body: pokemonId
-                })
+                    body: { pokemonId }
+                }),
+                invalidatesTags: ["pokedex"]
             }),
-            removeFromPokedex: builder.mutation<DBPokemon[], string>({
+            removeFromPokedex: builder.mutation<PokedexApiResponse, number>({
                 query: pokemonId => ({
-                    url: `/release/${pokemonId}`,
-                    method: 'DELETE',
-                })
+                    url: `/release`,
+                    method: 'POST',
+                    body: { pokemonId }
+
+                }),
+                invalidatesTags: ["pokedex"]
             })
         }
     }

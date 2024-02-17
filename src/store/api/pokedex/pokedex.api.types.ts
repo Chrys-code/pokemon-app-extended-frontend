@@ -1,9 +1,11 @@
-export interface Pokemon {
-    pokemonId: string,
-    name: string,
-    url: string
-}
+import { Pokemon } from "../pokemon/pokemon.api.types";
 
-export interface DBPokemon extends Pokemon {
-    _id: string,
+export type UserPokemons = number[];
+
+export type PokemonList = { [key: string]: Pokemon };
+
+export interface PokedexApiResponse {
+    pokemons: UserPokemons,
+    message?: string,
+    success: boolean,
 }

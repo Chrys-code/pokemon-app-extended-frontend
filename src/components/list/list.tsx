@@ -1,80 +1,57 @@
-import React, { FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import './list.css';
-import { PokemonContext } from '../../contexts/pokemon';
-import { Link } from 'react-router-dom';
-import Search from '../search/search';
-import { ApiPokemon, ApiPokemons, Pokemon, Pokedex } from '../../contexts/pokemon/pokemon.types';
+import { useFetchPokedexQuery } from '../../store/api/pokedex/pokedex.api';
+import ListItem from '../listItem/listItem';
+import { PokemonList } from '../../store/api/pokedex/pokedex.api.types';
+import { PokemonListContext } from '../../contexts/pokemonlist';
+import { filterByCollection, filterBySearch, filterByType } from './helpers';
+import { useFetchPokemonsQuery } from '../../store/api/pokemon/pokemon.api';
 
-const List: FC = ({ }: PropsWithChildren): JSX.Element => {
 
-    // get pokemons from context
-    const pokemonsContext = useContext(PokemonContext);
+const List: FC = (): JSX.Element => {
 
-    // Get User & Api pokemons
-    const [searchableUserPokemons, setSearchableUserPokemons] = useState<Pokedex | null>(null);
-    const [searchableAPIPokemons, setSearchableAPIPokemons] = useState<ApiPokemons | null>(null);
+    const { data: pokemonsData, isFetching: isPokemonsFetching } = useFetchPokemonsQuery();
+    const { data: pokedexData, isFetching: isPokedexFetching } = useFetchPokedexQuery();
+    const pokemonListContext = useContext(PokemonListContext);
+    const [pokemons, setPokemons] = useState<PokemonList>({});
 
-    // Search result for either user or api pokemons
-    const [searchResult, setSearchResult] = useState<any | null>(null);
-
-    // Browse collection state; uer or api pokemons
-    const [collection, setCollection] = useState<boolean>(false);
-
-    // Set searchable collections from context
+    // Filter PokemonList
     useEffect((): (() => void) | undefined => {
-        if (!pokemonsContext) return;
-        setSearchableAPIPokemons(pokemonsContext?.allPokemons);
-        setSearchableUserPokemons(pokemonsContext.pokedex);
-    }, [pokemonsContext])
+        if (!pokemonsData) return;
+        if (!pokedexData) return;
+        if (!pokemonListContext) { setPokemons(pokemonsData.pokemons); return; };
 
-    // Reset serach on collection change
-    useEffect((): (() => void) | undefined => {
-        if (collection) { setSearchResult(searchableUserPokemons); return; }
-        if (!collection) { setSearchResult(searchableAPIPokemons); return; }
-    }, [collection])
+        const filteredByCollection = filterByCollection(pokemonsData.pokemons, pokedexData.pokemons, pokemonListContext.collection);
+        const filteredByType = filterByType(filteredByCollection, pokemonListContext.filter)
+        const filterResult = filterBySearch(filteredByType, pokemonListContext.search)
+
+        setPokemons(filterResult);
+    }, [pokemonsData, pokedexData, pokemonListContext])
 
 
     /**
-     * Handles search initiated from search
-     * @param value - value from search input
-     * @param collection - users collection or all pokemons
-     * @returns void
+     * Handles rendering a list of items for pokemon list
+     * @param pokemons - PokemonList containing all pokemons
+     * @returns - JSX.Element list or null if pokedex is undefined
      */
-    function handleSearch(value: string | null, collection: boolean): void {
-        if (collection) {
-            if (value) {
-                let filteredResults = searchableUserPokemons?.filter((pokemon: Pokemon) => pokemon.name.includes(value)) || [];
-                setSearchResult(filteredResults);
-                return;
-            }
-            setSearchResult(searchableUserPokemons);
-            return;
-        } else {
-            if (value) {
-                let filteredResults = searchableAPIPokemons?.filter((pokemon: ApiPokemon) => pokemon.name.includes(value)) || [];
-                setSearchResult(filteredResults);
-                return;
-            }
-            setSearchResult(searchableAPIPokemons);
-            return;
-        }
-    }
+    function renderPokemonList(pokemons: PokemonList | undefined): JSX.Element[] | null {
+        if (!pokemons) return null;
+        return pokemons && Object.keys(pokemons).map((key: string) => {
+            const pokemon = pokemons[Number(key)];
+            return <ListItem key={pokemon.id} pokemon={pokemon} />
+        })
+    };
+
+    const loading = isPokemonsFetching || isPokedexFetching;
 
     return (
-        <>
-            <Search onCollectionChange={setCollection} isCollectionChecked={collection} onSearch={v => handleSearch(v, collection)} />
-            <ul className='list'>
-                {searchResult && searchResult.map((pokemon: Pokemon | ApiPokemon, i: number) => {
-                    return (
-                        <li key={i}>
-                            <Link to="/pokemon" state={{ accessUrl: pokemon.url }}>
-                                <p>{pokemon.name}</p>
-                            </Link>
-                        </li>
-                    )
-                })}
+        <section className='pokemon-list-container'>
+            <ul className='pokemon-list'>
+                {
+                    loading ? <h1 style={{ alignSelf: 'center', justifySelf: 'center' }}>Loading...</h1> : renderPokemonList(pokemons)
+                }
             </ul>
-        </>
+        </section>
     )
 }
 export default List
