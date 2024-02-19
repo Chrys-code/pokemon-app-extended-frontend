@@ -2,13 +2,14 @@ import React, { FC, useContext, useRef, useState } from 'react'
 import './searchbar.css'
 import { useFetchPokemonsQuery } from '../../store/api/pokemon/pokemon.api';
 import { useDebounce } from '../../utils/hooks/useDebounce';
-import { PokemonListDispatchContext } from '../../contexts/pokemonlist';
+import { PokemonListContext, PokemonListDispatchContext } from '../../contexts/pokemonlist';
 
 const Searchbar: FC = (): JSX.Element => {
 
+    const pokemonListContext = useContext(PokemonListContext);
     const dispatch = useContext(PokemonListDispatchContext);
     const [inputCounter, setInputCounter] = useState<number>(0);
-    const { data, isFetching } = useFetchPokemonsQuery();
+    const { data, isFetching } = useFetchPokemonsQuery(pokemonListContext?.limit || 20);
     const formRef: React.MutableRefObject<HTMLFormElement | null> = useRef(null);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -34,6 +35,7 @@ const Searchbar: FC = (): JSX.Element => {
                 filter: formData.get("filter") ? String(formData.get("filter")) : null,
                 collection: String(formData.get("collection")) as "user" | "all",
                 showSelected: String(formData.get("showSelected")) as "selected" | "all",
+                limit: Number(formData.get("limit"))
             }
         })
     }
@@ -44,16 +46,37 @@ const Searchbar: FC = (): JSX.Element => {
         if (formRef.current) formRef.current.requestSubmit();
     }
 
+    const limit = Array.from([20, 50, 100]);
+
     return (
         <section className='searchbar-container'>
             <form ref={formRef} className='searchbar-wrapper' onSubmit={handleSubmit} onChange={() => setInputCounter(inputCounter + 1)} >
-                <input name="search" type="text" placeholder='search for a pokemon...' />
+                <label htmlFor='search'>Search:
+                    <input name="search" type="text" placeholder='search for a pokemon...' />
+                </label>
                 {isFetching ? <span>Loading...</span> :
-                    <select name='filter' className='filter-type' defaultValue="all">
+                    <label htmlFor='filter'> Type:
+                        <select name='filter' className='filter-type' defaultValue="all">
+                            {
+                                data && data.pokemonTypes.map((type: string) => (
+                                    <option value={type} key={type}>
+                                        {type}
+                                    </option>
+                                ))
+                            }
+                            <option value="all">
+                                all
+                            </option>
+                        </select>
+                    </label>
+                }
+
+                <label htmlFor='limit'> Limit:
+                    <select name='limit' className='filter-type' defaultValue="20">
                         {
-                            data && data.pokemonTypes.map((type: string) => (
-                                <option value={type} key={type}>
-                                    {type}
+                            limit && limit.map((limit: number) => (
+                                <option value={limit} key={limit}>
+                                    {limit}
                                 </option>
                             ))
                         }
@@ -61,7 +84,7 @@ const Searchbar: FC = (): JSX.Element => {
                             all
                         </option>
                     </select>
-                }
+                </label>
                 <label htmlFor='showSelected' > Show selected:
                     <input type='checkbox' value='selected' name='showSelected' />
                 </label>

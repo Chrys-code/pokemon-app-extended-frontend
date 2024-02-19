@@ -10,9 +10,9 @@ import { useFetchPokemonsQuery } from '../../store/api/pokemon/pokemon.api';
 
 const List: FC = (): JSX.Element => {
 
-    const { data: pokemonsData, isFetching: isPokemonsFetching } = useFetchPokemonsQuery();
-    const { data: pokedexData, isFetching: isPokedexFetching } = useFetchPokedexQuery();
     const pokemonListContext = useContext(PokemonListContext);
+    const { data: pokedexData, isFetching: isPokedexFetching } = useFetchPokedexQuery();
+    const { data: pokemonsData, isFetching: isPokemonsFetching } = useFetchPokemonsQuery(pokemonListContext?.limit || 20);
     const dispatch = useContext(PokemonListDispatchContext);
     const [pokemons, setPokemons] = useState<PokemonList | null>(null);
 

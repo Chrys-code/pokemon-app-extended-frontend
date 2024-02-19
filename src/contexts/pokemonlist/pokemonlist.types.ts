@@ -4,6 +4,7 @@ export interface PokemonListContextType {
     collection: "all" | "user",
     showSelected: "all" | "selected",
     selected: number[],
+    limit: number
 }
 
 export type PokemonListActionTypeType = "search" | "filter" | "collection" | "select" | "deselect"
@@ -14,7 +15,9 @@ export type PokemonListActionPayloadType = {
     collection?: "all" | "user",
     showSelected?: "all" | "selected",
     pokemonId?: number,
+    limit?: number
 }
+
 
 export interface PokemonListActionType {
     type: PokemonListActionTypeType,

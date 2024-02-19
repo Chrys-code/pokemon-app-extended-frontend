@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import { PokemonListActionType, PokemonListContextType } from './pokemonlist.types';
 
 // Creating context to hold & mutate state
@@ -13,6 +13,13 @@ export const PokemonListDispatchContext = createContext<React.Dispatch<PokemonLi
 export function PokemonListProvider({ children }: { children: React.ReactNode }) {
 
     const [pokemonListContext, dispatch] = useReducer(pokemonListReducer, initialPokemonList);
+
+    useEffect((): (() => void) => {
+
+        console.log(pokemonListContext)
+
+        return (): void => { }
+    }, [pokemonListContext])
 
     return (
         <PokemonListContext.Provider value={pokemonListContext}>
@@ -45,13 +52,17 @@ function pokemonListReducer(state: PokemonListContextType, action: PokemonListAc
             if (typeof action.payload.showSelected == "undefined") {
                 throw Error('ShowSelected cannot be undefined at' + action.type);
             }
+            if (typeof action.payload.limit == "undefined") {
+                throw Error('Limit cannot be undefined at' + action.type);
+            }
 
             return {
                 ...state,
                 search: action.payload.search,
                 filter: action.payload.filter,
                 collection: action.payload.collection,
-                showSelected: action.payload.showSelected
+                showSelected: action.payload.showSelected,
+                limit: action.payload.limit
             };
         }
 
@@ -76,6 +87,7 @@ function pokemonListReducer(state: PokemonListContextType, action: PokemonListAc
                 selected: state.selected.filter(pokemonId => pokemonId != action.payload.pokemonId)
             };
         }
+
         default: {
             throw Error('Unknown action: ' + action.type);
         }
@@ -83,4 +95,4 @@ function pokemonListReducer(state: PokemonListContextType, action: PokemonListAc
 }
 
 // Initial state for pokemon collection context
-const initialPokemonList: PokemonListContextType = { search: null, filter: null, collection: "all", selected: [], showSelected: "all" };
+const initialPokemonList: PokemonListContextType = { search: null, filter: null, collection: "all", selected: [], showSelected: "all", limit: 20 };

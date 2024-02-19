@@ -11,9 +11,9 @@ export const pokemonsApiSlice = createApi({
     tagTypes: ['pokemons'],
     endpoints(builder) {
         return {
-            fetchPokemons: builder.query<PokemonApiResponse, void>({
-                query() {
-                    return '/'
+            fetchPokemons: builder.query<PokemonApiResponse, number | void>({
+                query(limit: number) {
+                    return `?limit=${limit}`
                 },
                 providesTags: ["pokemons"]
             }),
