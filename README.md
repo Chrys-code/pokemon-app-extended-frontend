@@ -1,41 +1,33 @@
-# Requirements
+This project is a front-end piece of a full-stack application. The application allows the user to login/register/logout. Once the user has registered or logged in they can see a list of pokemons.
+In the app there are ways to see, filter or interact with the list of pokemons.
 
-- Node.js
-- Node Package Manager
+Features
+1. Searching:
+   - Search by name (text input)
+   - Filter by pokemon type (dropdown)
+   - Set the number of pokemons in the list to view (20,50,100) (dropdown)
+   - Show only selected pokemons (checkbox)
+   - Show only the user's collection (calls protected APIs) (checkbox)
 
-## Tools used:
+2. List functionalities
+   - Indicate loading
+   - Incicate empty list
+   - List Pokemons
+  
+3. List Item functionalities
+   - Item is bordered if the user has the pokemon in his pokedex
+   - Item is hightlighted if the user hovers over or selected the pokemon in the list
+   - Item can be selected/deselected then filtered
+   - Item can be inspected => Navigates to Pokemon detail page
+  
+4. Pokemon Details page
+   - Image of the pokemon and a few details
+   - Border image if the pokemon is in users pokedex
+   - Action button to catch or release a pokemon (calls protected APIs)
 
-- React.js
-- Cascading Style Sheets (CSS)
-- Axios
+#Tools:
+React, TypeScript, Redux RTK
 
-## Start
+#Purpose of the project:
 
-- set .env based on env.example
-- npm i
-- npm run start
-
-
-## Features
-
-- Login
-- Register
-- List all pokemons
-- Broswe your own collection
-- Inspect a pokemon
-- Catch a pokemon
-
-## Arcitecture review and differences from requirements:
-
-Did not use Redux or similar state management tool as the scope of the project does not justify bringing in complex global state managers. It might also consume more time to set up properly.
-
-The applciation uses ReactContext instead with the use of "useReducer" hook to manage state with dispatched actions on events.
-
-The application is wrapped into 2 contexts; AuthContext & PokemonContext. One of each containing the auth state & user and the other the list of pokemons and the user's pokemons. These two contexts are handled through dispatched actions from the application.
-
-
-## Note
-
-Please note that the application is not finished and requires more work.
-This application was developed over 14 hours so far insetad of 8
-
+The purpose of the project is to learn how to structure React applications and Redux's RTK including back-end services. The application handles auth state and pokemon list state in a React Context API with useReducer hook as a data layer over the search and list components, making it easy to scale with additional functionalities and manage.
