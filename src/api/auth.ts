@@ -9,7 +9,14 @@ axios.defaults.headers.head = {
     "Access-Control-Allow-Origin": appDomain
 }
 
-export async function register({ email, password }: { email: string, password: string }): Promise<any> {
+export interface RegisterApiResponse {
+    user: {
+        id: string,
+        email: string
+    }
+}
+
+export async function register({ email, password }: { email: string, password: string }): Promise<RegisterApiResponse> {
     try {
         const response = await axios.post(
             `${endpoint}/register`,
