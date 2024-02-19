@@ -2,7 +2,7 @@ import React, { FC, useContext, useRef, useState } from 'react'
 import './login.css';
 
 import { AuthDispatchContext } from "../../contexts/auth";
-import { User, UserActionTypes } from '../../contexts/auth/authContext.types';
+import { UserActionTypes, UserData } from '../../contexts/auth/authContext.types';
 import { login, register } from '../../api/auth';
 
 const Login: FC = (): JSX.Element => {
@@ -75,7 +75,7 @@ const Login: FC = (): JSX.Element => {
      * @param loginMethod - Login method selected in state login/register
      * @returns User object
      */
-    async function handleAPICall({ email, password, loginMethod }: { email: string, password: string, loginMethod: UserActionTypes }): Promise<User | undefined> {
+    async function handleAPICall({ email, password, loginMethod }: { email: string, password: string, loginMethod: UserActionTypes }): Promise<UserData | undefined> {
         if (!email || !password) return;
 
         let data;
@@ -88,7 +88,7 @@ const Login: FC = (): JSX.Element => {
             data = await login({ email, password });
         }
 
-        return data.user;
+        return data?.user;
     }
 
     // State changing button values based on loginMethod
