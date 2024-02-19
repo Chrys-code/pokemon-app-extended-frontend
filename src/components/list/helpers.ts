@@ -52,3 +52,24 @@ export function filterByCollection(pokemons: PokemonList, collection: number[] |
 
     return filtered;
 }
+
+
+/**
+ * Filters PokemonList by all or selected by user
+ * @param pokemons - PokemonList
+ * @param selected - Selected pokemon id array
+ * @param showSelected - boolean
+ * @returns 
+ */
+export function filterBySelected(pokemons: PokemonList, selected: number[], showSelected: "selected" | "all"): PokemonList {
+    if (showSelected == "all") return pokemons;
+    if (!selected.length) return {};
+    const filtered = Object.keys(pokemons)
+        .filter(key => selected.includes(Number(key)))
+        .reduce((obj: PokemonList, key) => {
+            obj[key] = pokemons[key];
+            return obj;
+        }, {});
+
+    return filtered;
+}

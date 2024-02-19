@@ -31,22 +31,49 @@ export function PokemonListProvider({ children }: { children: React.ReactNode })
  */
 function pokemonListReducer(state: PokemonListContextType, action: PokemonListActionType) {
     switch (action.type) {
-        case 'search': {
-            return {
-                ...state,
-                search: action.payload.search ?? null
-            };
-        }
         case 'filter': {
+
+            if (typeof action.payload.filter == "undefined") {
+                throw Error('Filter cannot be undefined at' + action.type);
+            }
+            if (typeof action.payload.search == "undefined") {
+                throw Error('Search cannot be undefined at' + action.type);
+            }
+            if (typeof action.payload.collection == "undefined") {
+                throw Error('Collection cannot be undefined at' + action.type);
+            }
+            if (typeof action.payload.showSelected == "undefined") {
+                throw Error('ShowSelected cannot be undefined at' + action.type);
+            }
+
             return {
                 ...state,
-                filter: action.payload.filter ?? null
+                search: action.payload.search,
+                filter: action.payload.filter,
+                collection: action.payload.collection,
+                showSelected: action.payload.showSelected
             };
         }
-        case 'collection': {
+
+        case 'select': {
+            if (typeof action.payload.pokemonId == "undefined") {
+                throw Error('PokemonId cannot be undefined at' + action.type);
+            }
+
             return {
                 ...state,
-                collection: action.payload.collection ?? "all"
+                selected: [...state.selected, action.payload.pokemonId]
+            };
+        }
+
+        case 'deselect': {
+            if (typeof action.payload.pokemonId == "undefined") {
+                throw Error('PokemonId cannot be undefined at' + action.type);
+            }
+
+            return {
+                ...state,
+                selected: state.selected.filter(pokemonId => pokemonId != action.payload.pokemonId)
             };
         }
         default: {
@@ -56,4 +83,4 @@ function pokemonListReducer(state: PokemonListContextType, action: PokemonListAc
 }
 
 // Initial state for pokemon collection context
-const initialPokemonList: PokemonListContextType = { search: null, filter: null, collection: "all" };
+const initialPokemonList: PokemonListContextType = { search: null, filter: null, collection: "all", selected: [], showSelected: "all" };

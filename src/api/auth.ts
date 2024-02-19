@@ -2,6 +2,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const endpoint = `${process.env.REACT_APP_API}/auth`
+const appDomain = process.env.REACT_APP_DOMAIN || ''
+
+axios.defaults.withCredentials = true;
+axios.defaults.headers.head = {
+    "Access-Control-Allow-Origin": appDomain
+}
 
 export async function register({ email, password }: { email: string, password: string }): Promise<any> {
     try {

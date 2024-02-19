@@ -13,6 +13,14 @@
     background-color: rgb(219, 242, 234);
 }
 
+.pokemon-list-item.item-selected {
+    background-color: rgb(219, 242, 234);
+}
+
+.pokemon-list-item.pokemon-captured {
+    border: 2px solid green;
+}
+
 .pokemon-list-item .list-item-details {
     width: 65%;
     display: flex;
