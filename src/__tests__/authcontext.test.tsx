@@ -64,10 +64,7 @@ describe("Auth Context", () => {
         beforeEach(() => {
             render(
                 <AuthProvider>
-                    <>
-                        {MockAuthConsumer()}
-                        {MockDispatchContextConsumer("login")}
-                    </>
+                    {MockAuthConsumer()}
                 </AuthProvider >
             );
         });
