@@ -14,7 +14,7 @@ const List: FC = (): JSX.Element => {
     const { data: pokedexData, isFetching: isPokedexFetching } = useFetchPokedexQuery();
     const pokemonListContext = useContext(PokemonListContext);
     const dispatch = useContext(PokemonListDispatchContext);
-    const [pokemons, setPokemons] = useState<PokemonList>({});
+    const [pokemons, setPokemons] = useState<PokemonList | null>(null);
 
     // Filter PokemonList
     useEffect((): (() => void) | undefined => {
@@ -60,7 +60,7 @@ const List: FC = (): JSX.Element => {
      * @param pokemons - PokemonList containing all pokemons
      * @returns - JSX.Element list or null if pokedex is undefined
      */
-    function renderPokemonList(pokemons: PokemonList | undefined): JSX.Element[] | null {
+    function renderPokemonList(pokemons: PokemonList | null): JSX.Element[] | null {
         if (!pokemons) return null;
         return pokemons && Object.keys(pokemons).map((key: string) => {
             const pokemon = pokemons[Number(key)];
@@ -71,15 +71,20 @@ const List: FC = (): JSX.Element => {
     };
 
     const loading = isPokemonsFetching || isPokedexFetching;
+    const shouldShowList = !loading && pokemons && Object.keys(pokemons).length;
+    const shouldShowEmptyList = !loading && (!pokemons || !Object.keys(pokemons).length);
 
     return (
         <section className='pokemon-list-container'>
             <ul className='pokemon-list'>
                 {
-                    Object.keys(pokemons).length && loading ? <h2 className='feedback'>Loading...</h2> : renderPokemonList(pokemons)
+                    loading && <h2 className='feedback'>Loading...</h2>
                 }
                 {
-                    !Object.keys(pokemons).length && !loading && <h2 className='feedback'>No pokemons :/</h2>
+                    shouldShowList && renderPokemonList(pokemons)
+                }
+                {
+                    shouldShowEmptyList && <h2 className='feedback'>No pokemons :/</h2>
                 }
             </ul>
         </section>
