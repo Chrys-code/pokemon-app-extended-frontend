@@ -65,7 +65,7 @@ const List: FC = (): JSX.Element => {
         return pokemons && Object.keys(pokemons).map((key: string) => {
             const pokemon = pokemons[Number(key)];
             const isCaptured = !!pokedexData?.pokemons.includes(Number(key))
-            const isSelected = pokemonListContext?.showSelected == "all" && pokemonListContext?.selected.includes(Number(key));
+            const isSelected = !!pokemonListContext?.selected.includes(Number(key));
             return <ListItem key={pokemon.id} pokemon={pokemon} isCaptured={isCaptured} isSelected={isSelected} handleSelect={handleSelect} />
         })
     };
@@ -76,7 +76,10 @@ const List: FC = (): JSX.Element => {
         <section className='pokemon-list-container'>
             <ul className='pokemon-list'>
                 {
-                    loading ? <h1 style={{ alignSelf: 'center', justifySelf: 'center' }}>Loading...</h1> : renderPokemonList(pokemons)
+                    Object.keys(pokemons).length && loading ? <h2 className='feedback'>Loading...</h2> : renderPokemonList(pokemons)
+                }
+                {
+                    !Object.keys(pokemons).length && !loading && <h2 className='feedback'>No pokemons :/</h2>
                 }
             </ul>
         </section>

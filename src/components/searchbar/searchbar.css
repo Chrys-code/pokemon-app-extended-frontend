@@ -14,3 +14,12 @@
     align-items: center;
     justify-content: space-between;
 }
+
+.searchbar-container .searchbar-wrapper input[name='search'],
+.searchbar-container .searchbar-wrapper select {
+    padding: .5em 1em;
+}
+
+.searchbar-container .searchbar-wrapper input[type="checkbox" i] {
+    margin-left: .5em;
+}

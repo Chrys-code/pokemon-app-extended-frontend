@@ -16,3 +16,8 @@
     background-color: antiquewhite;
     border-radius: 1em;
 }
+
+.pokemon-list-container .pokemon-list .feedback {
+    align-self: center;
+    justify-self: center;
+}
