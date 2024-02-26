@@ -1,6 +1,11 @@
 This project is a front-end piece of a full-stack application. The application allows the user to login/register/logout. Once the user has registered or logged in they can see a list of pokemons.
 In the app there are ways to see, filter or interact with the list of pokemons.
 
+#To run:
+- npm i
+- fill in .env follwing .env.example
+- npm run start
+
 Features
 1. Searching:
    - Search by name (text input)
@@ -25,9 +30,9 @@ Features
    - Border image if the pokemon is in users pokedex
    - Action button to catch or release a pokemon (calls protected APIs)
 
-##Tools:##
+##Tools:
 React, TypeScript, Redux RTK
 
-##Purpose of the project:##
+##Purpose of the project:
 
 The purpose of the project is to learn how to structure React applications and Redux's RTK including back-end services. The application handles auth state and pokemon list state in a React Context API with useReducer hook as a data layer over the search and list components, making it easy to scale with additional functionalities and manage.
