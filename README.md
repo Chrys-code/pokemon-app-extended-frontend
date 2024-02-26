@@ -25,9 +25,9 @@ Features
    - Border image if the pokemon is in users pokedex
    - Action button to catch or release a pokemon (calls protected APIs)
 
-#Tools:
+##Tools:##
 React, TypeScript, Redux RTK
 
-#Purpose of the project:
+##Purpose of the project:##
 
 The purpose of the project is to learn how to structure React applications and Redux's RTK including back-end services. The application handles auth state and pokemon list state in a React Context API with useReducer hook as a data layer over the search and list components, making it easy to scale with additional functionalities and manage.
